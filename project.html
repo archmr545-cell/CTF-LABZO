@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>CTF Lab - Hub</title>
+  <style>
+    :root{--bg:#0b1020;--card:#111a33;--text:#e7ecff;--muted:#aab3d6;--accent:#5eead4;}
+    body{margin:0;font-family:ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Arial; background:linear-gradient(180deg,#070b16,#0b1020 60%); color:var(--text)}
+    .wrap{max-width:980px; margin:0 auto; padding:24px 18px 40px}
+    .hero{padding:22px 18px; border:1px solid rgba(94,234,212,.18); background:rgba(17,26,51,.8); border-radius:18px}
+    h1{margin:0 0 6px; font-size:26px}
+    p{margin:0;color:var(--muted); line-height:1.6}
+    .grid{display:grid; grid-template-columns: repeat(auto-fit,minmax(240px,1fr)); gap:14px; margin-top:16px}
+    .card{background:rgba(17,26,51,.9); border:1px solid rgba(255,255,255,.08); border-radius:16px; padding:14px}
+    .card h2{margin:6px 0 8px; font-size:16px}
+    .btn{display:inline-block; margin-top:10px; padding:10px 12px; background:rgba(94,234,212,.14); border:1px solid rgba(94,234,212,.35); border-radius:12px; color:var(--text); text-decoration:none; font-weight:800}
+    .small{color:var(--muted); font-size:12px; margin-top:10px}
+    .lock{color:var(--accent); font-weight:800}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="hero">
+      <h1>CTF Lab Hub</h1>
+      <p>Gunakan menu di bawah untuk membuka challenge. Catatan: validasi flag pada demo ini masih sisi client; untuk versi sulit (web sungguhan) nanti dipindah ke server.</p>
+    </div>
+
+    <div class="grid">
+      <div class="card">
+        <div class="lock">Challenge Set</div>
+        <h2>Mini CTF (4 challenge)</h2>
+        <div class="small">Web/OSINT/Crypto/Logic</div>
+        <a class="btn" href="./ctf-lab.html">Buka CTF Lab</a>
+      </div>
+
+      <div class="card">
+        <div class="lock">Hard Mode (Saran)</div>
+        <h2>Jangan pakai local HTML-only</h2>
+        <div class="small">Supaya “sulit di tembus”, harus pakai server-side check + rate limit + anti tamper.</div>
+        <div class="small">(Belum diimplementasikan karena app.py tidak bisa dibaca dari tools saat ini.)</div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
+
