@@ -1,0 +1,203 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>CTF Lab</title>
+  <style>
+    :root{--bg:#0b1020;--card:#111a33;--text:#e7ecff;--muted:#aab3d6;--accent:#5eead4;--danger:#fb7185;--ok:#34d399;}
+    body{margin:0;font-family:ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Arial; background:linear-gradient(180deg,#070b16,#0b1020 60%); color:var(--text)}
+    header{padding:28px 18px 10px; max-width:980px; margin:0 auto}
+    h1{font-size:28px;margin:0 0 6px; letter-spacing:.3px}
+    p{margin:0;color:var(--muted);line-height:1.5}
+    .wrap{max-width:980px; margin:0 auto; padding:16px 18px 40px}
+    .grid{display:grid; grid-template-columns: repeat(auto-fit,minmax(260px,1fr)); gap:14px}
+    .card{background:rgba(17,26,51,.9); border:1px solid rgba(94,234,212,.14); border-radius:16px; padding:14px; box-shadow: 0 10px 30px rgba(0,0,0,.25)}
+    .top{display:flex; align-items:flex-start; justify-content:space-between; gap:12px}
+    .tag{font-size:12px; color:var(--muted); padding:6px 10px; border:1px solid rgba(255,255,255,.08); border-radius:999px; white-space:nowrap}
+    .points{font-weight:700; font-size:12px; color:var(--accent); padding:6px 10px; border:1px solid rgba(94,234,212,.3); border-radius:999px; background:rgba(94,234,212,.08)}
+    h2{margin:10px 0 6px; font-size:16px}
+    .desc{color:var(--muted); font-size:13px; line-height:1.6}
+    details{margin-top:10px; border-top:1px solid rgba(255,255,255,.08); padding-top:10px}
+    summary{cursor:pointer; color:var(--accent); font-weight:650; font-size:13px}
+    .hint{color:var(--muted); font-size:13px; line-height:1.6; margin-top:8px}
+    .task{margin-top:10px}
+    textarea{width:100%; min-height:44px; background:#0b1228; color:var(--text); border:1px solid rgba(255,255,255,.12); border-radius:12px; padding:10px; resize:vertical; outline:none}
+    button{margin-top:10px; background:rgba(94,234,212,.14); border:1px solid rgba(94,234,212,.35); color:var(--text); padding:10px 12px; border-radius:12px; font-weight:700; cursor:pointer}
+    button:hover{background:rgba(94,234,212,.22)}
+    .result{margin-top:10px; font-weight:700}
+    .ok{color:var(--ok)}
+    .bad{color:var(--danger)}
+    footer{max-width:980px; margin:0 auto; padding:0 18px 26px; color:var(--muted); font-size:12px}
+    code{font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace; background:rgba(255,255,255,.06); padding:2px 6px; border-radius:8px; color:#dbe7ff}
+    .small{font-size:12px;color:var(--muted)}
+  </style>
+</head>
+<body>
+  <header>
+    <h1>CTF Lab (Mini Web/OSINT)</h1>
+    <p>Ini lab lokal berisi beberapa challenge kecil. Tujuannya latihan proses: baca soal → tebak pola → uji → input flag.</p>
+  </header>
+
+  <div class="wrap">
+    <div class="grid">
+      <!-- Challenge 1 -->
+      <section class="card">
+        <div class="top">
+          <div>
+            <div class="tag">Web • Enumeration</div>
+            <h2>Warmup: Login palsu</h2>
+          </div>
+          <div class="points">+50</div>
+        </div>
+        <p class="desc">Diberi pesan terenkripsi. Polanya Caesar shift +5 pada huruf alfabet (A-Z & a-z). Cari flag.</p>
+        <details open>
+          <summary>Data</summary>
+          <div class="hint">
+            Ciphertext: <code>FZFZQTSYI</code><br/>
+            Format flag umum lab ini: <code>CTF{...}</code>
+          </div>
+        </details>
+        <div class="task">
+          <input id="in1" placeholder="Masukkan flag" style="display:none" />
+          <textarea id="ta1" spellcheck="false" placeholder="Masukkan flag di sini (mis: CTF{...})"></textarea>
+          <button onclick="check(1)">Submit</button>
+          <div id="res1" class="result"></div>
+          <div class="small">Tips: Caesar shift +5 berarti dekripsi = -5.</div>
+        </div>
+      </section>
+
+      <!-- Challenge 2 -->
+      <section class="card">
+        <div class="top">
+          <div>
+            <div class="tag">OSINT • Regex</div>
+            <h2>Flag di halaman</h2>
+          </div>
+          <div class="points">+70</div>
+        </div>
+        <p class="desc">Flag disembunyikan sebagai komentar HTML di file challenge ini. Gunakan “View Source” atau cari pola <code>CTF{</code>.</p>
+        <details>
+          <summary>Petunjuk</summary>
+          <div class="hint">
+            Kamu bisa cek source kode halaman untuk menemukan flag.
+          </div>
+        </details>
+        <div class="task">
+          <textarea id="ta2" spellcheck="false" placeholder="Masukkan flag dari source"></textarea>
+          <button onclick="check(2)">Submit</button>
+          <div id="res2" class="result"></div>
+        </div>
+      </section>
+
+      <!-- Challenge 3 -->
+      <section class="card">
+        <div class="top">
+          <div>
+            <div class="tag">Crypto • Encoding</div>
+            <h2>Base64 yang nyaris benar</h2>
+          </div>
+          <div class="points">+100</div>
+        </div>
+        <p class="desc">Decode Base64, lalu periksa ada pergeseran satu karakter (hapus/ubah satu byte terakhir) agar cocok format flag.</p>
+        <details>
+          <summary>Data</summary>
+          <div class="hint">
+            Base64: <code>Q0RNe3pPZkQxX2kzX3J1bD0xfQ==</code><br/>
+            (Catatan: output decode mungkin perlu koreksi kecil)
+          </div>
+        </details>
+        <div class="task">
+          <textarea id="ta3" spellcheck="false" placeholder="Masukkan flag hasil decoding"></textarea>
+          <button onclick="check(3)">Submit</button>
+          <div id="res3" class="result"></div>
+        </div>
+      </section>
+
+      <!-- Challenge 4 -->
+      <section class="card">
+        <div class="top">
+          <div>
+            <div class="tag">Logic • String</div>
+            <h2>Reversi & join</h2>
+          </div>
+          <div class="points">+120</div>
+        </div>
+        <p class="desc">Ambil potongan string lalu lakukan reverse per kata, kemudian join tanpa spasi.</p>
+        <details>
+          <summary>Data</summary>
+          <div class="hint">
+            Potongan: <code>"nu" "lG" "bF" "10"</code><br/>
+            Ekspektasi setelah proses: <code>CTF{...}</code>
+          </div>
+        </details>
+        <div class="task">
+          <textarea id="ta4" spellcheck="false" placeholder="Masukkan flag"></textarea>
+          <button onclick="check(4)">Submit</button>
+          <div id="res4" class="result"></div>
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <!-- Hidden flag for Challenge 2: CTF{view_the_source_not_only_devtools} -->
+
+  <footer>
+    Lab ini sengaja mini dan cocok untuk latihan. Jangan gunakan untuk kegiatan ilegal.
+  </footer>
+
+  <script>
+    // Anti-tamper (obfuscation demo).
+    // Catatan: ini bukan SQLi defense sungguhan karena validasi tetap di sisi client.
+    // Kita simpan hash agar flag tidak muncul plaintext di source.
+    const HASHED_FLAGS = {
+      1: "6d6be3a5d6d3d3b7cdb1f4ed6af2c2a4dbb5d4e4e6d3b2f3b4f1f4c2a0a8c2d0",
+      2: "b3c6a6a9b0f5c0a1d2e3f4a5b6c7d8e9f0a1b2c3d4e5f6a7b8c9d0e1f2a3b4c5",
+
+      4: "a1b2c3d4e5f60718293a4b5c6d7e8f90123456789abcdef0123456789abcdef0"
+    };
+
+    async function sha256Hex(str){
+      const data = new TextEncoder().encode(str);
+      const buf = await crypto.subtle.digest('SHA-256', data);
+      return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2,'0')).join('');
+    }
+
+    function normalize(s){
+      return (s||"").trim();
+    }
+
+
+    function show(id, ok, msg){
+      const el = document.getElementById('res'+id);
+      el.className = 'result ' + (ok ? 'ok' : 'bad');
+      el.textContent = msg;
+    }
+
+    async function check(id){
+      const val = normalize(document.getElementById('ta'+id).value);
+      if(!val){
+        show(id,false,'Isi dulu flag.');
+        return;
+      }
+
+      // Server-side check (HTB-like friction via rate limit)
+      try{
+        const r = await fetch('http://127.0.0.1:5000/api/check', {
+          method: 'POST',
+          headers: {'Content-Type':'application/json'},
+          body: JSON.stringify({ id: id, flag: val })
+        });
+
+        const j = await r.json();
+        show(id, !!j.ok, j.msg || '');
+      }catch(e){
+        show(id,false,'Gagal connect ke server. Pastikan app.py jalan di 127.0.0.1:5000 dan file ini dibuka dari server.');
+      }
+    }
+
+
+  </script>
+</body>
+</html>
+
